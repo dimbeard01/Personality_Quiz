@@ -31,7 +31,7 @@ class QuestionViewController: UIViewController {
                            type: .lion),
                     Answer(text: "I barely notice them",
                            type: .monkey),
-                    Answer(text: "I love them", type: .pig)
+                    Answer(text: "I love eat", type: .pig)
             ])
         ]
 
