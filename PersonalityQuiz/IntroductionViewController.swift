@@ -8,13 +8,14 @@
 
 import UIKit
 
-class IntroductionViewController: UIViewController {
-
+final class IntroductionViewController: UIViewController {
+    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
-
-
+    
+    // MARK: - Actions
+    @IBAction private func unwindToQuizIntroduction(segue: UIStoryboardSegue) {
+    }
 }
-

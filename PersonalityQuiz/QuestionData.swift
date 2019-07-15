@@ -2,7 +2,7 @@
 //  QuestionData.swift
 //  PersonalityQuiz
 //
-//  Created by Dima Surkov on 21.06.2019.
+//  Created by Dima Surkov on 03.07.2019.
 //  Copyright © 2019 Dima Surkov. All rights reserved.
 //
 
@@ -20,22 +20,14 @@ enum ResponseType {
 
 struct Answer {
     var text: String
-    var type: AnimalType
+    var type: CharacterType
 }
 
-enum AnimalType: Character {
-    case dog = "🐶", lion = "🦁", monkey = "🐵", pig = "🐷"
-    
-    var definition: String {
-        switch self {
-        case .dog:
-            return "Gav - Gav"
-        case .lion:
-            return "Rrrr"
-        case .monkey:
-            return "U-u-u"
-        case .pig:
-            return "Hryu - Hryu"
-        }
-    }
+enum CharacterType: String {
+    case darth = "Darth Vader"
+    case homer = "Homer Sipson"
+    case geek = "Insane Hacker"
+    case neo = "Neo"
+    case princess = "Disney Princess"
 }
+
