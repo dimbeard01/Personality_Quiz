@@ -8,13 +8,13 @@
 
 import UIKit
 
-class ResultViewController: UIViewController {
+final class ResultViewController: UIViewController {
     
     // MARK: - Outlets
-    @IBOutlet var resultAnswerLabel: UILabel!
+    @IBOutlet private var resultAnswerLabel: UILabel!
     
     // MARK: - Properties
-    var responses: [Answer]!
+    var responses: [Answer]?
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -24,20 +24,19 @@ class ResultViewController: UIViewController {
     }
     
     // MARK: - Actions
-    func calculatePersonalityResult() {
+    private func calculatePersonalityResult() {
         var frequencyOfAnswers: [CharacterType: Int] = [:]
-        let responsesType = responses.map { $0.type }
+        guard let theResponses = responses else { return }
+        let responsesType = theResponses.map { $0.type }
         
         for response in responsesType {
             frequencyOfAnswers[response] = (frequencyOfAnswers[response] ?? 0) + 1
         }
         
-        let frequentAnswerSorted = frequencyOfAnswers.sorted(by:
-        { (pair1, pair2) -> Bool in
-            return pair1.value > pair2.value
-        })
-        
-        let mostCommonAnswer = frequentAnswerSorted.sorted { $0.1 > $1.1 }.first!.key
-        resultAnswerLabel.text = "You are \(mostCommonAnswer.rawValue)!"
+        let frequentAnswerSorted = frequencyOfAnswers.sorted(by: { $0.value > $1.value })
+        let mostCommonAnswer = frequentAnswerSorted.sorted { $0.1 > $1.1 }
+        guard let firstCommonAnswer = mostCommonAnswer.first else { return }
+        let keyAnswer = firstCommonAnswer.key
+        resultAnswerLabel.text = "You are \(keyAnswer.rawValue)!"
     }
 }

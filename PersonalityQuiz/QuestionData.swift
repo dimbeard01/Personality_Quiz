@@ -24,6 +24,10 @@ struct Answer {
 }
 
 enum CharacterType: String {
-    case darth = "Darth Vader", homer = "Homer Sipson", geek = "Insane Hacker", neo = "Neo", princess = "Disney Princess"
+    case darth = "Darth Vader"
+    case homer = "Homer Sipson"
+    case geek = "Insane Hacker"
+    case neo = "Neo"
+    case princess = "Disney Princess"
 }
 

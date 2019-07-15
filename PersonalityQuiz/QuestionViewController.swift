@@ -8,41 +8,42 @@
 
 import UIKit
 
-class QuestionViewController: UIViewController {
+final class QuestionViewController: UIViewController {
     
     // MARK: - Outlets
-    @IBOutlet var singleSV: UIStackView!
-    @IBOutlet var singleButton1: UIButton!
-    @IBOutlet var singleButton2: UIButton!
-    @IBOutlet var singleButton3: UIButton!
-    @IBOutlet var singleButton4: UIButton!
-    @IBOutlet var singleButton5: UIButton!
+    @IBOutlet private var singleSV: UIStackView!
+    @IBOutlet private var singleButton1: UIButton!
+    @IBOutlet private var singleButton2: UIButton!
+    @IBOutlet private var singleButton3: UIButton!
+    @IBOutlet private var singleButton4: UIButton!
+    @IBOutlet private var singleButton5: UIButton!
     
-    @IBOutlet var multipleSV: UIStackView!
-    @IBOutlet var multipleLabel1: UILabel!
-    @IBOutlet var multipleLabel2: UILabel!
-    @IBOutlet var multipleLabel3: UILabel!
-    @IBOutlet var multipleLabel4: UILabel!
-    @IBOutlet var multipleLabel5: UILabel!
-    @IBOutlet var multipleSwitch1: UISwitch!
-    @IBOutlet var multipleSwitch2: UISwitch!
-    @IBOutlet var multipleSwitch3: UISwitch!
-    @IBOutlet var multipleSwitch4: UISwitch!
-    @IBOutlet var multipleSwitch5: UISwitch!
-    @IBOutlet var submitAnswerButton: UIButton!
+    @IBOutlet private var multipleSV: UIStackView!
+    @IBOutlet private var multipleLabel1: UILabel!
+    @IBOutlet private var multipleLabel2: UILabel!
+    @IBOutlet private var multipleLabel3: UILabel!
+    @IBOutlet private var multipleLabel4: UILabel!
+    @IBOutlet private var multipleLabel5: UILabel!
+    @IBOutlet private var multipleSwitch1: UISwitch!
+    @IBOutlet private var multipleSwitch2: UISwitch!
+    @IBOutlet private var multipleSwitch3: UISwitch!
+    @IBOutlet private var multipleSwitch4: UISwitch!
+    @IBOutlet private var multipleSwitch5: UISwitch!
+    @IBOutlet private var submitAnswerButton: UIButton!
     
-    @IBOutlet var rangedSV: UIStackView!
-    @IBOutlet var rangedSlider: UISlider!
-    @IBOutlet var rangedLabel1: UILabel!
-    @IBOutlet var rangedLabel2: UILabel!
+    @IBOutlet private var rangedSV: UIStackView!
+    @IBOutlet private var rangedSlider: UISlider!
+    @IBOutlet private var rangedLabel1: UILabel!
+    @IBOutlet private var rangedLabel2: UILabel!
     
-    @IBOutlet var questionProgressView: UIProgressView!
-    @IBOutlet var questionLabel: UILabel!
+    @IBOutlet private var questionProgressView: UIProgressView!
+    @IBOutlet private var questionLabel: UILabel!
     
     // MARK: - Properties
-    var questionIndex = 0
-    var answerChosen = [Answer]()
-    var questions: [Question] = [
+    private var questionIndex = 0
+    private var answerChosen = [Answer]()
+    private let resultSegueIdentifier = "ResultSegue"
+    private var questions: [Question] = [
         Question(text: "What is your favorite thing?",
                  type: .single,
                  answer: [
@@ -87,11 +88,11 @@ class QuestionViewController: UIViewController {
     }
     
     // MARK: - Actions
-    func updateUI() {
+    private func updateUI() {
         singleSV.isHidden = true
         multipleSV.isHidden = true
         rangedSV.isHidden = true
-        
+        print(questionIndex)
         navigationItem.title = "Question \(questionIndex + 1)"
         let currentQuestion = questions[questionIndex]
         let currentAnswer = currentQuestion.answer
@@ -109,17 +110,16 @@ class QuestionViewController: UIViewController {
         }
     }
 
-    func updateSingleStack(using answer: [Answer]) {
+    private func updateSingleStack(using answer: [Answer]) {
         singleSV.isHidden = false
         singleButton1.setTitle(answer[0].text, for: .normal)
         singleButton2.setTitle(answer[1].text, for: .normal)
         singleButton3.setTitle(answer[2].text, for: .normal)
         singleButton4.setTitle(answer[3].text, for: .normal)
         singleButton5.setTitle(answer[4].text, for: .normal)
-        
     }
     
-    func updateMultipleStack(using answer: [Answer]) {
+    private func updateMultipleStack(using answer: [Answer]) {
         multipleSV.isHidden = false
         multipleLabel1.text = answer[0].text
         multipleLabel2.text = answer[1].text
@@ -132,17 +132,16 @@ class QuestionViewController: UIViewController {
         multipleSwitch3.isOn = false
         multipleSwitch4.isOn = false
         multipleSwitch5.isOn = false
-        
     }
     
-    func updateRangedStack(using answer: [Answer]){
+     private func updateRangedStack(using answer: [Answer]){
         rangedSV.isHidden = false
         rangedSlider.setValue(0.5, animated: false)
         rangedLabel1.text = answer.first?.text
         rangedLabel2.text = answer.last?.text
     }
     
-    @IBAction func singleAnswerButtonPressed(_ sender: UIButton) {
+    @IBAction private func singleAnswerButtonPressed(_ sender: UIButton) {
         let currentAnswer = questions[questionIndex].answer
         
         switch sender {
@@ -162,7 +161,7 @@ class QuestionViewController: UIViewController {
         newQuestion()
     }
     
-    @IBAction func multipleAnswerButtonPressed(_ sender: UIButton) {
+    @IBAction private func multipleAnswerButtonPressed(_ sender: UIButton) {
         let currentAnswer = questions[questionIndex].answer
         
         if multipleSwitch1.isOn {
@@ -184,11 +183,10 @@ class QuestionViewController: UIViewController {
         if multipleSwitch5.isOn {
             answerChosen.append(currentAnswer[4])
         }
-        
         newQuestion()
     }
     
-    @IBAction func rangedAnswerButtonPressed(_ sender: UIButton) {
+    @IBAction private func rangedAnswerButtonPressed(_ sender: UIButton) {
         let currentAnswer = questions[questionIndex].answer
         let index = Int(round(rangedSlider.value * Float(currentAnswer.count - 1)))
         answerChosen.append(currentAnswer[index])
@@ -196,20 +194,21 @@ class QuestionViewController: UIViewController {
     }
     
     
-    func newQuestion() {
+    private func newQuestion() {
         questionIndex += 1
         
         if questionIndex < questions.count {
             updateUI()
         } else {
-            performSegue(withIdentifier: "ResultSegue", sender: nil)
+            performSegue(withIdentifier: resultSegueIdentifier, sender: nil)
         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ResultSegue" {
+        if segue.identifier == resultSegueIdentifier {
             let resultViewController = segue.destination as! ResultViewController
             resultViewController.responses = answerChosen
         }
     }
 }
+
