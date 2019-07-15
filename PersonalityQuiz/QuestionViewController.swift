@@ -43,43 +43,9 @@ final class QuestionViewController: UIViewController {
     private var questionIndex = 0
     private var answerChosen = [Answer]()
     private let resultSegueIdentifier = "ResultSegue"
-    private var questions: [Question] = [
-        Question(text: "What is your favorite thing?",
-                 type: .single,
-                 answer: [
-                    Answer(text: "Lightsaber", type: .darth),
-                    Answer(text: "Donuts", type: .homer),
-                    Answer(text: "Mirror", type: .princess),
-                    Answer(text: "Guns", type: .neo),
-                    Answer(text: "Internet", type: .geek)]),
-        
-        Question(text: "What is your favorite color?",
-                 type: .multiple,
-                 answer: [
-                    Answer(text: "Red", type: .darth),
-                    Answer(text: "Yellow", type: .homer),
-                    Answer(text: "Pink", type: .princess),
-                    Answer(text: "Black", type: .neo),
-                    Answer(text: "Green", type: .geek)]),
-                 
-        Question(text: "What do you like to do?",
-                 type: .multiple,
-                 answer: [
-                    Answer(text: "Kill", type: .darth),
-                    Answer(text: "Eat", type: .homer),
-                    Answer(text: "Dance", type: .princess),
-                    Answer(text: "Shoot", type: .neo),
-                    Answer(text: "Don't sleep", type: .geek)]),
-    
-        Question(text: "How much do you love a kids?",
-                 type: .ranged,
-                 answer: [
-                    Answer(text: "Not love", type: .darth),
-                    Answer(text: "Not Really", type: .geek),
-                    Answer(text: "Who is it?", type: .neo),
-                    Answer(text: "Normal", type: .homer),
-                    Answer(text: "Very", type: .princess)]
-        )]
+    private var questions: [Question] {
+        return getQuestionData()
+    }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -89,14 +55,16 @@ final class QuestionViewController: UIViewController {
     
     // MARK: - Actions
     private func updateUI() {
-        singleSV.isHidden = true
-        multipleSV.isHidden = true
-        rangedSV.isHidden = true
-        print(questionIndex)
-        navigationItem.title = "Question \(questionIndex + 1)"
         let currentQuestion = questions[questionIndex]
         let currentAnswer = currentQuestion.answer
         let totalProgress = Float(questionIndex) / Float(questions.count)
+        
+        singleSV.isHidden = true
+        multipleSV.isHidden = true
+        rangedSV.isHidden = true
+    
+        navigationItem.title = "Question \(questionIndex + 1)"
+        
         questionProgressView.setProgress(totalProgress, animated: true)
         questionLabel.text = currentQuestion.text
 
@@ -193,7 +161,6 @@ final class QuestionViewController: UIViewController {
         newQuestion()
     }
     
-    
     private func newQuestion() {
         questionIndex += 1
         
@@ -209,6 +176,46 @@ final class QuestionViewController: UIViewController {
             let resultViewController = segue.destination as! ResultViewController
             resultViewController.responses = answerChosen
         }
+    }
+    
+    // MARK: - Data
+    private func getQuestionData() -> [Question] {
+        return [Question(text: "What is your favorite thing?",
+                     type: .single,
+                     answer: [
+                        Answer(text: "Lightsaber", type: .darth),
+                        Answer(text: "Donuts", type: .homer),
+                        Answer(text: "Mirror", type: .princess),
+                        Answer(text: "Guns", type: .neo),
+                        Answer(text: "Internet", type: .geek)]),
+            
+            Question(text: "What is your favorite color?",
+                     type: .multiple,
+                     answer: [
+                        Answer(text: "Red", type: .darth),
+                        Answer(text: "Yellow", type: .homer),
+                        Answer(text: "Pink", type: .princess),
+                        Answer(text: "Black", type: .neo),
+                        Answer(text: "Green", type: .geek)]),
+            
+            Question(text: "What do you like to do?",
+                     type: .multiple,
+                     answer: [
+                        Answer(text: "Kill", type: .darth),
+                        Answer(text: "Eat", type: .homer),
+                        Answer(text: "Dance", type: .princess),
+                        Answer(text: "Shoot", type: .neo),
+                        Answer(text: "Don't sleep", type: .geek)]),
+            
+            Question(text: "How much do you love a kids?",
+                     type: .ranged,
+                     answer: [
+                        Answer(text: "Not love", type: .darth),
+                        Answer(text: "Not Really", type: .geek),
+                        Answer(text: "Who is it?", type: .neo),
+                        Answer(text: "Normal", type: .homer),
+                        Answer(text: "Very", type: .princess)]
+            )]
     }
 }
 
